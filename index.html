@@ -167,9 +167,10 @@ footer .wrap{padding-block:20px 90px;display:flex;flex-wrap:wrap;gap:8px 24px;ju
 /* ===== НАСТРОЙКИ ===== */
 // Ваш Telegram (username без @)
 const TG_USERNAME = "zakaz_seller";
-// Ссылка на Google Таблицу, опубликованную как CSV (Файл → Поделиться → Опубликовать в интернете → CSV).
-// Пока пусто — показываются товары из списка PRODUCTS ниже.
-const SHEET_CSV_URL = "https://docs.google.com/spreadsheets/d/1lP6CGh4Znx1pu_UWGiH2C3TP28oT-HM_KJ_9KHFtRJ4/gviz/tq?tqx=out:csv&gid=1741658796";
+// Google Таблица с товарами: каждая категория — отдельный лист с таким же названием.
+// Если таблица недоступна, показываются товары из списка PRODUCTS ниже.
+const SHEET_ID = "1lP6CGh4Znx1pu_UWGiH2C3TP28oT-HM_KJ_9KHFtRJ4";
+const SHEET_TABS = [["Плойки","curl"],["Фены","dryer"],["Фен-щётки","brush"],["Стайлеры","styler"],["Термобраши","thermo"],["Выпрямители","flat"],["Эпиляторы","epil"]];
 
 const ICONS = {
   curl:'<svg viewBox="0 0 120 80" fill="none" stroke="currentColor" stroke-width="5" stroke-linecap="round"><rect x="8" y="30" width="34" height="20" rx="8"/><rect x="42" y="33" width="64" height="14" rx="7"/><path d="M42 30c14-14 40-14 56-6"/><path d="M8 40H2"/></svg>',
@@ -259,21 +260,24 @@ function photoUrl(u){
   return m ? "https://lh3.googleusercontent.com/d/"+m[1] : u;
 }
 async function load(){
-  if(SHEET_CSV_URL){
-    try{
-      const res = await fetch(SHEET_CSV_URL + (SHEET_CSV_URL.includes("?")?"&":"?") + "t=" + Date.now());
-      if(!res.ok) throw new Error(res.status);
-      const rows = parseCSV(await res.text()).slice(1);
-      const list = rows.map((r,i)=>{
-        const [name,catName,price,specs,tag,photo,show,old,desc] = r.map(x=>(x||"").trim());
-        const c = CAT_BY_NAME[(catName||"").toLowerCase()];
-        if(!name || !c || (show||"").toLowerCase()==="нет") return null;
-        return {id:i+1, cat:c, name, price:Number(String(price).replace(/[^\d]/g,""))||0,
-                specs:(specs||"").split(";").map(s=>s.trim()).filter(Boolean), tag, photo:photoUrl(photo),
-                old:Number(String(old||"").replace(/[^\d]/g,""))||0, desc:desc||""};
-      }).filter(Boolean);
-      if(list.length) PRODUCTS = list;
-    }catch(e){ console.warn("Таблица недоступна, показываю запасной список", e); }
+  if(SHEET_ID){
+    const t=Date.now();
+    const results = await Promise.all(SHEET_TABS.map(async ([tab,c])=>{
+      try{
+        const url=`https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:csv&headers=1&sheet=${encodeURIComponent(tab)}&t=${t}`;
+        const res=await fetch(url); if(!res.ok) throw new Error(res.status);
+        const rows=parseCSV(await res.text());
+        if(!rows.length || (rows[0][0]||"").trim()!=="Название") return [];
+        return rows.slice(1).map((r,i)=>{
+          const [name,price,specs,tag,photo,show,old,desc]=r.map(x=>(x||"").trim());
+          if(!name || (show||"").toLowerCase()==="нет") return null;
+          return {id:c+(i+1), cat:c, name, price:Number(String(price).replace(/[^\d]/g,""))||0,
+                  specs:(specs||"").split(";").map(s=>s.trim()).filter(Boolean), tag, photo:photoUrl(photo),
+                  old:Number(String(old||"").replace(/[^\d]/g,""))||0, desc:desc||""};
+        }).filter(Boolean);
+      }catch(e){ console.warn("Не удалось загрузить лист", tab, e); return null; }
+    }));
+    if(results.some(r=>r!==null)){ const list=results.flat().filter(Boolean); if(list.length) PRODUCTS=list; }
   }
   render();
 }
@@ -314,7 +318,7 @@ gridEl.addEventListener("click",e=>{
 gridEl.addEventListener("keydown",e=>{
   if((e.key==="Enter"||e.key===" ") && e.target.classList.contains("card")){ e.preventDefault(); openProduct(e.target.dataset.id); }
 });
-function fromHash(){ const m=location.hash.match(/^#p(\d+)$/); if(m) openProduct(m[1],false); else closeProduct(); }
+function fromHash(){ const m=location.hash.match(/^#p([\w-]+)$/); if(m) openProduct(m[1],false); else closeProduct(); }
 window.addEventListener("hashchange",fromHash);
 load().then(fromHash);
 </script>
