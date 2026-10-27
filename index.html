@@ -59,9 +59,10 @@ header{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:col
 
 .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:16px;padding-bottom:110px}
 .card{background:var(--surface);border:1px solid var(--line);border-radius:18px;overflow:hidden;display:flex;flex-direction:column}
-.pic{aspect-ratio:1/1;max-width:100%;background:radial-gradient(circle at 70% 30%,var(--heat-soft),transparent 60%),var(--surface);display:grid;place-items:center;position:relative;border-bottom:1px solid var(--line)}
+.pic{aspect-ratio:5/6;overflow:hidden;max-width:100%;background:radial-gradient(circle at 70% 30%,var(--heat-soft),transparent 60%),var(--surface);display:grid;place-items:center;position:relative;border-bottom:1px solid var(--line)}
 .pic svg{width:58%;height:auto;color:var(--plum)}
-.pic img{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;background:#fff;padding:12px;box-sizing:border-box}
+.pic img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center;background:#fff;transition:transform .3s ease}
+.card:hover .pic img{transform:scale(1.03)}
 .tag{position:absolute;z-index:1;top:12px;left:12px;font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;background:var(--heat);color:#fff;padding:4px 9px;border-radius:999px}
 .body{padding:16px;display:flex;flex-direction:column;gap:10px;flex:1}
 .cat{font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
@@ -117,7 +118,6 @@ header{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:col
   .body{padding:10px;gap:6px}
   .name{font-size:13px}
   .cat,.specs{display:none}
-  .pic img{padding:6px}
   .tag{top:8px;left:8px;font-size:9px;padding:3px 7px}
   .foot{flex-direction:column;align-items:stretch;gap:8px;padding-top:2px}
   .price{font-size:15px}
@@ -221,7 +221,7 @@ function render(){
   const catName=Object.fromEntries(CATS);
   grid.innerHTML=list.map(p=>{
     const msg = p.price ? `Здравствуйте! Хочу заказать: ${p.name} — ${fmt(p.price)} сум. Есть в наличии?` : `Здравствуйте! Сколько стоит ${p.name}? Есть в наличии?`;
-    const img = p.photo ? `<img src="${esc(p.photo)}" alt="${esc(p.name)}" loading="lazy" onerror="this.remove()">` : "";
+    const img = p.photo ? `<img src="${esc(sized(p.photo,500))}" srcset="${esc(sized(p.photo,300))} 300w, ${esc(sized(p.photo,500))} 500w, ${esc(sized(p.photo,800))} 800w" sizes="(max-width:600px) 50vw, 280px" alt="${esc(p.name)}" loading="lazy" decoding="async" onerror="this.remove()">` : "";
     return `<article class="card" tabindex="0" data-id="${p.id}" aria-label="${esc(p.name)}">
       <div class="pic">${ICONS[p.cat]}${img}${p.tag?`<span class="tag">${esc(p.tag)}</span>`:""}</div>
       <div class="body">
@@ -254,6 +254,8 @@ function parseCSV(text){
   return rows;
 }
 const CAT_BY_NAME = {"плойки":"curl","фены":"dryer","фен-щётки":"brush","фен-щетки":"brush","стайлеры":"styler","термобраши":"thermo","выпрямители":"flat","эпиляторы":"epil"};
+/* Автоматический размер фото: Google сам отдаёт уменьшенную копию нужной ширины */
+function sized(u,w){ return /^https:\/\/lh3\.googleusercontent\.com\/d\/[\w-]+$/.test(u) ? u+"=w"+w : u; }
 function photoUrl(u){
   u=(u||"").trim(); if(!u) return "";
   const m=u.match(/drive\.google\.com\/(?:file\/d\/|open\?id=|uc\?id=)([\w-]+)/);
@@ -286,7 +288,7 @@ const msgFor=p=>p.price ? `Здравствуйте! Хочу заказать: 
 function openProduct(id, push){
   const p=PRODUCTS.find(x=>String(x.id)===String(id)); if(!p) return;
   const catName=Object.fromEntries(CATS);
-  const img=p.photo?`<img src="${esc(p.photo)}" alt="${esc(p.name)}" onerror="this.remove()">`:"";
+  const img=p.photo?`<img src="${esc(sized(p.photo,1200))}" alt="${esc(p.name)}" decoding="async" onerror="this.remove()">`:"";
   modal.innerHTML=`<div class="sheet" role="dialog" aria-modal="true" aria-label="${esc(p.name)}">
     <button class="close" type="button" aria-label="Закрыть">×</button>
     <div class="ph">${img||ICONS[p.cat]}${p.tag?`<span class="tag">${esc(p.tag)}</span>`:""}</div>
