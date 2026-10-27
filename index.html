@@ -1,0 +1,322 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>ploika.uz — плойки, фены и стайлеры в Узбекистане</title>
+<meta name="description" content="Плойки, фены, фен-щётки, стайлеры, термобраши, выпрямители и эпиляторы с доставкой по всему Узбекистану. Закажите в Telegram.">
+<meta property="og:title" content="ploika.uz — плойки, фены и стайлеры">
+<meta property="og:description" content="Доставка по всему Узбекистану. Закажите в Telegram.">
+<meta property="og:type" content="website">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%235b1f43'/%3E%3Ctext x='32' y='44' font-family='Arial' font-weight='700' font-size='34' text-anchor='middle' fill='%23e0592a'%3Ep%3C/text%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Unbounded:wght@500;700&family=Manrope:wght@400;500;700&display=swap">
+<style>
+html{-webkit-text-size-adjust:100%}
+body{margin:0;font-size:14px}
+img{max-width:100%}
+[hidden]{display:none!important}
+:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+/* Layout: sticky header + category chips, product grid, floating Telegram button */
+:root{
+  --bg:#f7f3f6; --surface:#ffffff; --ink:#26161f; --muted:#7a6571; --line:#eadde4;
+  --plum:#5b1f43; --heat:#e0592a; --heat-soft:#fde3d6; --tg:#229ed9;
+  --f-display:"Unbounded", "Arial Black", system-ui, sans-serif;
+  --f-body:"Manrope", system-ui, -apple-system, "Segoe UI", sans-serif;
+}
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]){
+  --bg:#170e14; --surface:#22161e; --ink:#f5eaf0; --muted:#b39aa8; --line:#3a2934;
+  --plum:#e7a9cc; --heat:#ff7a45; --heat-soft:#3b1e14; --tg:#3bb3ec; color-scheme:dark }}
+:root[data-theme="dark"]{
+  --bg:#170e14; --surface:#22161e; --ink:#f5eaf0; --muted:#b39aa8; --line:#3a2934;
+  --plum:#e7a9cc; --heat:#ff7a45; --heat-soft:#3b1e14; --tg:#3bb3ec; color-scheme:dark }
+
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:15px;line-height:1.5}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--bg)}
+.wrap{max-width:1120px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+
+header{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:color-mix(in srgb,var(--bg) 92%,transparent);backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
+.bar{display:flex;align-items:center;justify-content:space-between;gap:12px;padding-block:14px}
+.logo{font-family:var(--f-display);font-weight:700;font-size:20px;letter-spacing:-.02em;color:var(--plum);text-transform:lowercase}
+.logo span{color:var(--heat)}
+.bar a.tg-small{display:inline-flex;align-items:center;gap:8px;text-decoration:none;color:#fff;background:var(--tg);padding:9px 14px;border-radius:999px;font-weight:700;font-size:14px}
+
+.hero{padding-block:36px 20px;display:grid;gap:14px}
+.hero h1{font-family:var(--f-display);font-weight:700;font-size:clamp(26px,5vw,44px);line-height:1.1;margin:0;text-wrap:balance;max-width:18ch}
+.hero h1 em{font-style:normal;color:var(--heat)}
+.hero p{margin:0;color:var(--muted);max-width:60ch}
+.facts{display:flex;flex-wrap:wrap;gap:8px;margin-top:4px}
+.facts span{font-size:13px;font-weight:500;padding:6px 12px;border:1px solid var(--line);border-radius:999px;background:var(--surface)}
+
+.tools{display:flex;flex-wrap:wrap;gap:10px;align-items:center;padding-block:8px 18px}
+.chips{display:flex;gap:8px;overflow-x:auto;scrollbar-width:none;flex:1 1 auto;min-width:0}
+.chip{border:1px solid var(--line);background:var(--surface);color:var(--ink);padding:8px 14px;border-radius:999px;font:500 14px var(--f-body);cursor:pointer;white-space:nowrap}
+.chip[aria-pressed="true"]{background:var(--plum);border-color:var(--plum);color:var(--bg)}
+.search{flex:0 1 240px;min-width:0}
+.search input{width:100%;padding:9px 14px;border-radius:999px;border:1px solid var(--line);background:var(--surface);color:var(--ink);font:15px var(--f-body)}
+:focus-visible{outline:2px solid var(--heat);outline-offset:2px}
+
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:16px;padding-bottom:110px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:18px;overflow:hidden;display:flex;flex-direction:column}
+.pic{aspect-ratio:1/1;max-width:100%;background:radial-gradient(circle at 70% 30%,var(--heat-soft),transparent 60%),var(--surface);display:grid;place-items:center;position:relative;border-bottom:1px solid var(--line)}
+.pic svg{width:58%;height:auto;color:var(--plum)}
+.pic img{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;background:#fff;padding:12px;box-sizing:border-box}
+.tag{position:absolute;z-index:1;top:12px;left:12px;font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;background:var(--heat);color:#fff;padding:4px 9px;border-radius:999px}
+.body{padding:16px;display:flex;flex-direction:column;gap:10px;flex:1}
+.cat{font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.name{font-family:var(--f-display);font-weight:500;font-size:16px;line-height:1.25;margin:0}
+.specs{display:flex;flex-wrap:wrap;gap:6px;font-size:13px;color:var(--muted)}
+.specs b{color:var(--ink);font-weight:700}
+.heat{display:grid;gap:4px}
+.heat .scale{height:6px;border-radius:3px;background:var(--line);position:relative;overflow:hidden}
+.heat .scale i{position:absolute;top:0;bottom:0;background:linear-gradient(90deg,#f2b33d,var(--heat));border-radius:3px}
+.heat small{font-size:12px;color:var(--muted);font-variant-numeric:tabular-nums}
+.foot{margin-top:auto;display:flex;align-items:center;justify-content:space-between;gap:10px;padding-top:6px}
+.price{font-family:var(--f-display);font-weight:700;font-size:17px;font-variant-numeric:tabular-nums}
+.price s{display:block;font-family:var(--f-body);font-weight:500;font-size:12px;color:var(--muted)}
+.price .ask{font-family:var(--f-body);font-size:14px;font-weight:700;color:var(--muted)}
+.price small{font-family:var(--f-body);font-weight:500;font-size:12px;color:var(--muted)}
+.btn-tg{display:inline-flex;align-items:center;gap:7px;background:var(--tg);color:#fff;text-decoration:none;font-weight:700;font-size:14px;padding:10px 14px;border-radius:12px;white-space:nowrap}
+.btn-tg:hover{filter:brightness(1.08)}
+.btn-tg svg,.tg-small svg,.fab svg{width:18px;height:18px;flex:none}
+.card{cursor:pointer;transition:transform .15s ease,box-shadow .15s ease}
+.card:hover{transform:translateY(-2px);box-shadow:0 10px 24px rgba(38,22,31,.08)}
+.card:focus-visible{outline:2px solid var(--heat);outline-offset:2px}
+.more{font-size:13px;font-weight:700;color:var(--plum)}
+.modal{position:fixed;inset:0;z-index:20;display:flex;align-items:center;justify-content:center;padding:max(16px,env(safe-area-inset-top,0px)) max(16px,env(safe-area-inset-right,0px)) max(16px,env(safe-area-inset-bottom,0px)) max(16px,env(safe-area-inset-left,0px));background:rgba(20,10,16,.55)}
+.sheet{background:var(--surface);color:var(--ink);border-radius:20px;width:min(860px,100%);max-height:100%;overflow:auto;display:grid;grid-template-columns:1fr 1fr;position:relative}
+.sheet .ph{background:#fff;aspect-ratio:1/1;display:grid;place-items:center;position:relative;overflow:hidden;min-height:0}
+.sheet .ph img{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;padding:20px;box-sizing:border-box}
+.sheet .ph .tag{z-index:1}
+.sheet .ph svg{width:55%;color:var(--plum)}
+.sheet .info{padding:24px;display:flex;flex-direction:column;gap:14px;min-width:0}
+.sheet h2{font-family:var(--f-display);font-weight:600;font-size:22px;line-height:1.2;margin:0;text-wrap:balance}
+.sheet .desc{margin:0;color:var(--ink);line-height:1.6}
+.sheet ul{margin:0;padding-left:18px;display:grid;gap:4px;color:var(--muted)}
+.sheet .price{font-size:24px}
+.sheet .btn-tg{justify-content:center;padding:14px;font-size:15px}
+.sheet .note{font-size:13px;color:var(--muted)}
+.close{position:absolute;top:10px;right:10px;z-index:2;width:38px;height:38px;border-radius:50%;border:1px solid var(--line);background:var(--surface);color:var(--ink);font-size:22px;line-height:1;cursor:pointer}
+@media (max-width:700px){
+  .modal{align-items:flex-end;padding:0}
+  .sheet{grid-template-columns:1fr;border-radius:20px 20px 0 0;max-height:88vh;max-height:88dvh;overscroll-behavior:contain;-webkit-overflow-scrolling:touch}
+  .sheet .ph{aspect-ratio:auto;height:34vh;height:34dvh}
+  .sheet .ph img{padding:12px}
+  .sheet .info{padding:16px 16px calc(16px + env(safe-area-inset-bottom,0px));gap:10px}
+  .sheet h2{font-size:18px}
+  .sheet .price{font-size:20px}
+  .sheet .desc{font-size:14px;line-height:1.5}
+  .sheet ul{font-size:14px}
+  .sheet .btn-tg{position:sticky;bottom:calc(10px + env(safe-area-inset-bottom,0px));box-shadow:0 6px 18px rgba(34,158,217,.35)}
+  .close{position:sticky;top:10px;margin:10px 10px -48px auto;display:block}
+}
+@media (max-width:600px){
+  .grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+  .card{border-radius:14px}
+  .body{padding:10px;gap:6px}
+  .name{font-size:13px}
+  .cat,.specs{display:none}
+  .pic img{padding:6px}
+  .tag{top:8px;left:8px;font-size:9px;padding:3px 7px}
+  .foot{flex-direction:column;align-items:stretch;gap:8px;padding-top:2px}
+  .price{font-size:15px}
+  .btn-tg{justify-content:center;padding:9px 8px;font-size:13px}
+  .more{display:none}
+}
+.empty{grid-column:1/-1;text-align:center;color:var(--muted);padding:40px 0}
+
+.fab{position:fixed;right:calc(16px + env(safe-area-inset-right,0px));bottom:calc(16px + env(safe-area-inset-bottom,0px));z-index:6;display:inline-flex;align-items:center;gap:10px;background:var(--tg);color:#fff;text-decoration:none;font-weight:700;padding:14px 20px;border-radius:999px;box-shadow:0 8px 24px rgba(34,158,217,.35)}
+footer{border-top:1px solid var(--line);color:var(--muted);font-size:13px}
+footer .wrap{padding-block:20px 90px;display:flex;flex-wrap:wrap;gap:8px 24px;justify-content:space-between}
+@media (max-width:520px){ .bar a.tg-small span{display:none} .fab span{display:none} .fab{padding:16px} }
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap bar">
+    <div class="logo">ploika<span>.uz</span></div>
+    <a class="tg-small" id="tgTop" href="#" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M21.9 4.3 18.7 19.4c-.2 1-.9 1.3-1.7.8l-4.8-3.5-2.3 2.2c-.3.3-.5.5-1 .5l.3-4.9 8.9-8c.4-.3-.1-.5-.6-.2L6.5 13.2 1.8 11.7c-1-.3-1-1 .2-1.5L20.6 3c.9-.3 1.6.2 1.3 1.3z"/></svg><span>Написать</span></a>
+  </div>
+</header>
+
+<main class="wrap">
+  <section class="hero">
+    <h1>Плойки, фены, стайлеры и эпиляторы <em>с доставкой</em> по всему Узбекистану</h1>
+    <p>Выберите модель и нажмите «Написать в Telegram» — название товара сразу попадёт в сообщение. Ответим, поможем подобрать и оформим заказ.</p>
+    <div class="facts"><span>Доставка по всему Узбекистану</span><span>Оплата при получении</span><span>Гарантия на технику</span></div>
+  </section>
+
+  <div class="tools">
+    <div class="chips" id="chips" role="group" aria-label="Категории"></div>
+    <label class="search"><input id="q" type="search" placeholder="Поиск по каталогу" aria-label="Поиск"></label>
+  </div>
+
+  <section class="grid" id="grid" aria-live="polite"></section>
+</main>
+
+<div class="modal" id="modal" hidden></div>
+
+<footer><div class="wrap"><span>© ploika.uz, Ташкент</span><span>Доставка по всему Узбекистану</span></div></footer>
+
+<a class="fab" id="tgFab" href="#" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M21.9 4.3 18.7 19.4c-.2 1-.9 1.3-1.7.8l-4.8-3.5-2.3 2.2c-.3.3-.5.5-1 .5l.3-4.9 8.9-8c.4-.3-.1-.5-.6-.2L6.5 13.2 1.8 11.7c-1-.3-1-1 .2-1.5L20.6 3c.9-.3 1.6.2 1.3 1.3z"/></svg><span>Написать в Telegram</span></a>
+
+<script>
+/* ===== НАСТРОЙКИ ===== */
+// Ваш Telegram (username без @)
+const TG_USERNAME = "zakaz_seller";
+// Ссылка на Google Таблицу, опубликованную как CSV (Файл → Поделиться → Опубликовать в интернете → CSV).
+// Пока пусто — показываются товары из списка PRODUCTS ниже.
+const SHEET_CSV_URL = "https://docs.google.com/spreadsheets/d/1lP6CGh4Znx1pu_UWGiH2C3TP28oT-HM_KJ_9KHFtRJ4/gviz/tq?tqx=out:csv&gid=1741658796";
+
+const ICONS = {
+  curl:'<svg viewBox="0 0 120 80" fill="none" stroke="currentColor" stroke-width="5" stroke-linecap="round"><rect x="8" y="30" width="34" height="20" rx="8"/><rect x="42" y="33" width="64" height="14" rx="7"/><path d="M42 30c14-14 40-14 56-6"/><path d="M8 40H2"/></svg>',
+  dryer:'<svg viewBox="0 0 120 90" fill="none" stroke="currentColor" stroke-width="5" stroke-linecap="round"><circle cx="42" cy="34" r="26"/><circle cx="42" cy="34" r="10"/><path d="M68 26h34v16H68"/><path d="M36 60l-6 26h16l4-26"/></svg>',
+  brush:'<svg viewBox="0 0 120 80" fill="none" stroke="currentColor" stroke-width="5" stroke-linecap="round"><rect x="6" y="32" width="46" height="16" rx="8"/><rect x="52" y="26" width="58" height="28" rx="14"/><path d="M62 26v-6M74 26v-6M86 26v-6M98 26v-6M62 54v6M74 54v6M86 54v6M98 54v6"/></svg>',
+  flat:'<svg viewBox="0 0 120 80" fill="none" stroke="currentColor" stroke-width="5" stroke-linecap="round"><path d="M10 44 L110 30"/><path d="M10 50 L110 50"/><rect x="62" y="24" width="46" height="10" rx="3" transform="rotate(-8 85 29)"/><rect x="62" y="45" width="46" height="10" rx="3"/></svg>',
+  styler:'<svg viewBox="0 0 120 80" fill="none" stroke="currentColor" stroke-width="5" stroke-linecap="round"><rect x="6" y="32" width="40" height="16" rx="8"/><rect x="46" y="35" width="40" height="10" rx="5"/><circle cx="100" cy="20" r="9"/><circle cx="100" cy="60" r="9"/><path d="M86 40h6"/></svg>',
+  thermo:'<svg viewBox="0 0 120 80" fill="none" stroke="currentColor" stroke-width="5" stroke-linecap="round"><rect x="6" y="34" width="40" height="12" rx="6"/><rect x="46" y="28" width="60" height="24" rx="4"/><path d="M52 20v-4M62 20v-4M72 20v-4M82 20v-4M92 20v-4M100 20v-4M52 60v4M62 60v4M72 60v4M82 60v4M92 60v4M100 60v4"/></svg>',
+  epil:'<svg viewBox="0 0 120 90" fill="none" stroke="currentColor" stroke-width="5" stroke-linecap="round"><path d="M44 86h32l6-50H38z"/><rect x="30" y="12" width="60" height="24" rx="12"/><path d="M42 24h36M50 18v12M60 18v12M70 18v12"/><circle cx="60" cy="60" r="5"/></svg>'
+};
+
+const CATS = [["all","Все"],["curl","Плойки"],["dryer","Фены"],["brush","Фен-щётки"],["styler","Стайлеры"],["thermo","Термобраши"],["flat","Выпрямители"],["epil","Эпиляторы"]];
+
+/* Запасной список товаров (используется, если таблица не подключена или недоступна) */
+let PRODUCTS = [
+  {id:1,cat:"styler",name:"MAC Styler MC-6770 7 в 1",desc:"Фен-стайлер 7 в 1: сушит, выпрямляет, завивает и придаёт объём. Бесщёточный мотор 110 000 об/мин, 1400 Вт, 3 режима температуры и холодный обдув.",price:750000,specs:["1400 Вт", "7 насадок", "110 000 об/мин", "бесщёточный мотор"],old:850000,tag:"Скидка",photo:"https://lh3.googleusercontent.com/d/1lh5dzSPP9dGIkbMpuZD3WspdkVqOWvkH"},
+  {id:3,cat:"styler",name:"MAC-6767 фен-стайлер 8 в 1",desc:"Фен-стайлер 8 в 1 с LED-дисплеем. 1600 Вт, 110 000 об/мин, 3 скорости, температура 30/60/90/120 °C, холодный воздух, поворот головки на 90°, шнур 2 м. В комплекте кожаный кейс.",price:850000,specs:["1600 Вт", "110 000 об/мин", "кожаный кейс"],old:950000,tag:"Скидка",photo:"https://lh3.googleusercontent.com/d/1u0FfGHLTUH8C1c3CSnI2Vih8uBOf-PG1"},
+  {id:6,cat:"styler",name:"VGR V-487 стайлер 5 в 1",desc:"Многофункциональный стайлер 5 в 1: сушка, объём, локоны и выпрямление. 5 насадок и 4 режима работы.",price:550000,specs:["5 насадок", "4 режима"],photo:"https://lh3.googleusercontent.com/d/1E7FK6Pa-vfp3gBt6Xg1ljnnlj-NBOqpg"},
+  {id:9,cat:"styler",name:"JRM стайлер 5 в 1",desc:"Стайлер 5 в 1 с керамическим покрытием, бережный к волосам. Бесщёточный мотор.",price:400000,specs:["Керамика", "бесщёточный мотор"],photo:"https://lh3.googleusercontent.com/d/128Pux9Yzm6sVtHUCptF8ktjEv55PIcqR"},
+  {id:15,cat:"brush",name:"VGR V-480 фен-щётка 3 в 1",desc:"Фен-щётка 3 в 1 со встроенным генератором отрицательных ионов. 1200 Вт, 3 режима нагрева, 2 скорости, холодный обдув, шнур 1,8 м с поворотом на 360°, защита от перегрева.",price:300000,specs:["1200 Вт", "ионизация", "керамика"],old:350000,tag:"Скидка",photo:"https://lh3.googleusercontent.com/d/1hcU5EKRVRawH7Dw7EYetF8kha9EoyMSS"},
+  {id:20,cat:"flat",name:"MAC Styler Beauty Vibrating",desc:"Профессиональный утюжок с вибрирующими пластинами для гладкой укладки. Нагрев до 250 °C, титановое покрытие, выпрямляет и завивает, цифровой дисплей. В комплекте термостойкий кейс.",price:380000,specs:["Вибрирующие пластины", "титан", "дисплей", "кейс"],photo:"https://lh3.googleusercontent.com/d/1emeut-iazM7_wZS_rgBEiXDcjSWkfMTY"}
+];
+
+const fmt = n => n.toLocaleString("ru-RU").replace(/,/g," ");
+const tgLink = text => "https://t.me/" + TG_USERNAME + (text ? "?text=" + encodeURIComponent(text) : "");
+const TG_SVG = document.querySelector("#tgTop svg").outerHTML;
+
+document.getElementById("tgTop").href = tgLink("Здравствуйте! Хочу проконсультироваться по товарам ploika.uz.");
+document.getElementById("tgFab").href = tgLink("Здравствуйте! Хочу проконсультироваться по товарам ploika.uz.");
+
+let cat = "all";
+try { cat = localStorage.getItem("gs-cat") || "all"; } catch(e){}
+const chips = document.getElementById("chips");
+CATS.forEach(([k,label])=>{
+  const b=document.createElement("button");
+  b.className="chip"; b.type="button"; b.id="chip-"+k; b.textContent=label;
+  b.setAttribute("aria-pressed", k===cat);
+  b.onclick=()=>{cat=k; try{localStorage.setItem("gs-cat",k)}catch(e){}; chips.querySelectorAll(".chip").forEach(c=>c.setAttribute("aria-pressed",c===b)); render();};
+  chips.appendChild(b);
+});
+const q=document.getElementById("q"); q.addEventListener("input",render);
+
+function render(){
+  const s=q.value.trim().toLowerCase();
+  const list=PRODUCTS.filter(p=>(cat==="all"||p.cat===cat)&&(!s||(p.name+" "+p.specs.join(" ")).toLowerCase().includes(s)));
+  const grid=document.getElementById("grid");
+  if(!list.length){grid.innerHTML='<div class="empty">Ничего не нашлось. Напишите нам в Telegram — подберём модель.</div>';return;}
+  const catName=Object.fromEntries(CATS);
+  grid.innerHTML=list.map(p=>{
+    const msg = p.price ? `Здравствуйте! Хочу заказать: ${p.name} — ${fmt(p.price)} сум. Есть в наличии?` : `Здравствуйте! Сколько стоит ${p.name}? Есть в наличии?`;
+    const img = p.photo ? `<img src="${esc(p.photo)}" alt="${esc(p.name)}" loading="lazy" onerror="this.remove()">` : "";
+    return `<article class="card" tabindex="0" data-id="${p.id}" aria-label="${esc(p.name)}">
+      <div class="pic">${ICONS[p.cat]}${img}${p.tag?`<span class="tag">${esc(p.tag)}</span>`:""}</div>
+      <div class="body">
+        <div class="cat">${catName[p.cat]}</div>
+        <h3 class="name">${esc(p.name)}</h3>
+        <div class="specs">${p.specs.map(x=>`<span>${esc(x)}</span>`).join("<span>·</span>")}</div>
+        <div class="foot">
+          <div class="price">${p.price ? `${p.old>p.price?`<s>${fmt(p.old)}</s>`:""}${fmt(p.price)} <small>сум</small>` : `<span class="ask">Цена по запросу</span>`}</div>
+          <a class="btn-tg" href="${tgLink(msg)}" target="_blank" rel="noopener">${TG_SVG}Написать</a>
+        </div>
+        <span class="more">Подробнее →</span>
+      </div></article>`;
+  }).join("");
+}
+
+const esc = s => String(s).replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+
+/* ---- Загрузка из Google Таблицы ---- */
+function parseCSV(text){
+  const rows=[]; let row=[], cell="", q=false;
+  for(let i=0;i<text.length;i++){
+    const ch=text[i];
+    if(q){ if(ch=='"'){ if(text[i+1]=='"'){cell+='"';i++} else q=false } else cell+=ch; }
+    else if(ch=='"') q=true;
+    else if(ch==','){ row.push(cell); cell=""; }
+    else if(ch=='\n'){ row.push(cell); rows.push(row); row=[]; cell=""; }
+    else if(ch!='\r') cell+=ch;
+  }
+  if(cell!==""||row.length){ row.push(cell); rows.push(row); }
+  return rows;
+}
+const CAT_BY_NAME = {"плойки":"curl","фены":"dryer","фен-щётки":"brush","фен-щетки":"brush","стайлеры":"styler","термобраши":"thermo","выпрямители":"flat","эпиляторы":"epil"};
+function photoUrl(u){
+  u=(u||"").trim(); if(!u) return "";
+  const m=u.match(/drive\.google\.com\/(?:file\/d\/|open\?id=|uc\?id=)([\w-]+)/);
+  return m ? "https://lh3.googleusercontent.com/d/"+m[1] : u;
+}
+async function load(){
+  if(SHEET_CSV_URL){
+    try{
+      const res = await fetch(SHEET_CSV_URL + (SHEET_CSV_URL.includes("?")?"&":"?") + "t=" + Date.now());
+      if(!res.ok) throw new Error(res.status);
+      const rows = parseCSV(await res.text()).slice(1);
+      const list = rows.map((r,i)=>{
+        const [name,catName,price,specs,tag,photo,show,old,desc] = r.map(x=>(x||"").trim());
+        const c = CAT_BY_NAME[(catName||"").toLowerCase()];
+        if(!name || !c || (show||"").toLowerCase()==="нет") return null;
+        return {id:i+1, cat:c, name, price:Number(String(price).replace(/[^\d]/g,""))||0,
+                specs:(specs||"").split(";").map(s=>s.trim()).filter(Boolean), tag, photo:photoUrl(photo),
+                old:Number(String(old||"").replace(/[^\d]/g,""))||0, desc:desc||""};
+      }).filter(Boolean);
+      if(list.length) PRODUCTS = list;
+    }catch(e){ console.warn("Таблица недоступна, показываю запасной список", e); }
+  }
+  render();
+}
+const modal=document.getElementById("modal");
+const msgFor=p=>p.price ? `Здравствуйте! Хочу заказать: ${p.name} — ${fmt(p.price)} сум. Есть в наличии?` : `Здравствуйте! Сколько стоит ${p.name}? Есть в наличии?`;
+function openProduct(id, push){
+  const p=PRODUCTS.find(x=>String(x.id)===String(id)); if(!p) return;
+  const catName=Object.fromEntries(CATS);
+  const img=p.photo?`<img src="${esc(p.photo)}" alt="${esc(p.name)}" onerror="this.remove()">`:"";
+  modal.innerHTML=`<div class="sheet" role="dialog" aria-modal="true" aria-label="${esc(p.name)}">
+    <button class="close" type="button" aria-label="Закрыть">×</button>
+    <div class="ph">${img||ICONS[p.cat]}${p.tag?`<span class="tag">${esc(p.tag)}</span>`:""}</div>
+    <div class="info">
+      <div class="cat">${catName[p.cat]||""}</div>
+      <h2>${esc(p.name)}</h2>
+      <div class="price">${p.price ? `${p.old>p.price?`<s>${fmt(p.old)}</s>`:""}${fmt(p.price)} <small>сум</small>` : `<span class="ask">Цена по запросу</span>`}</div>
+      ${p.desc?`<p class="desc">${esc(p.desc)}</p>`:""}
+      ${p.specs.length?`<ul>${p.specs.map(x=>`<li>${esc(x)}</li>`).join("")}</ul>`:""}
+      <a class="btn-tg" href="${tgLink(msgFor(p))}" target="_blank" rel="noopener">${TG_SVG}Заказать в Telegram</a>
+      <div class="note">Доставка по всему Узбекистану · Оплата при получении</div>
+    </div></div>`;
+  modal.hidden=false; document.body.style.overflow="hidden";
+  modal.querySelector(".close").focus();
+  if(push!==false && location.hash!=="#p"+p.id) history.replaceState(null,"","#p"+p.id);
+}
+function closeProduct(){
+  if(modal.hidden) return;
+  modal.hidden=true; modal.innerHTML=""; document.body.style.overflow="";
+  if(location.hash) history.replaceState(null,"",location.pathname+location.search);
+}
+modal.addEventListener("click",e=>{ if(e.target===modal||e.target.closest(".close")) closeProduct(); });
+document.addEventListener("keydown",e=>{ if(e.key==="Escape") closeProduct(); });
+const gridEl=document.getElementById("grid");
+gridEl.addEventListener("click",e=>{
+  if(e.target.closest("a")) return;
+  const c=e.target.closest(".card"); if(c) openProduct(c.dataset.id);
+});
+gridEl.addEventListener("keydown",e=>{
+  if((e.key==="Enter"||e.key===" ") && e.target.classList.contains("card")){ e.preventDefault(); openProduct(e.target.dataset.id); }
+});
+function fromHash(){ const m=location.hash.match(/^#p(\d+)$/); if(m) openProduct(m[1],false); else closeProduct(); }
+window.addEventListener("hashchange",fromHash);
+load().then(fromHash);
+</script>
+</body>
+</html>
