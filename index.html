@@ -220,7 +220,7 @@ function render(){
   if(!list.length){grid.innerHTML='<div class="empty">Ничего не нашлось. Напишите нам в Telegram — подберём модель.</div>';return;}
   const catName=Object.fromEntries(CATS);
   grid.innerHTML=list.map(p=>{
-    const msg = p.price ? `Здравствуйте! Хочу заказать: ${p.name} — ${fmt(p.price)} сум. Есть в наличии?` : `Здравствуйте! Сколько стоит ${p.name}? Есть в наличии?`;
+    const msg = p.price ? `Здравствуйте! Хочу заказать: ${p.name} — ${fmt(p.price)} ${p.cur||"сум"}. Есть в наличии?` : `Здравствуйте! Сколько стоит ${p.name}? Есть в наличии?`;
     const img = p.photo ? `<img src="${esc(sized(p.photo,500))}" srcset="${esc(sized(p.photo,300))} 300w, ${esc(sized(p.photo,500))} 500w, ${esc(sized(p.photo,800))} 800w" sizes="(max-width:600px) 50vw, 280px" alt="${esc(p.name)}" loading="lazy" decoding="async" onerror="this.remove()">` : "";
     return `<article class="card" tabindex="0" data-id="${p.id}" aria-label="${esc(p.name)}">
       <div class="pic">${ICONS[p.cat]}${img}${p.tag?`<span class="tag">${esc(p.tag)}</span>`:""}</div>
@@ -229,7 +229,7 @@ function render(){
         <h3 class="name">${esc(p.name)}</h3>
         <div class="specs">${p.specs.map(x=>`<span>${esc(x)}</span>`).join("<span>·</span>")}</div>
         <div class="foot">
-          <div class="price">${p.price ? `${p.old>p.price?`<s>${fmt(p.old)}</s>`:""}${fmt(p.price)} <small>сум</small>` : `<span class="ask">Цена по запросу</span>`}</div>
+          <div class="price">${p.price ? `${p.old>p.price?`<s>${fmt(p.old)}</s>`:""}${fmt(p.price)} <small>${p.cur||"сум"}</small>` : `<span class="ask">Цена по запросу</span>`}</div>
           <a class="btn-tg" href="${tgLink(msg)}" target="_blank" rel="noopener">${TG_SVG}Написать</a>
         </div>
         <span class="more">Подробнее →</span>
@@ -273,7 +273,7 @@ async function load(){
         return rows.slice(1).map((r,i)=>{
           const [name,price,specs,tag,photo,show,old,desc]=r.map(x=>(x||"").trim());
           if(!name || (show||"").toLowerCase()==="нет") return null;
-          return {id:c+(i+1), cat:c, name, price:Number(String(price).replace(/[^\d]/g,""))||0,
+          return {id:c+(i+1), cat:c, name, price:Number(String(price).replace(/[^\d]/g,""))||0, cur:/\$|usd|долл/i.test(price)?"$":"сум",
                   specs:(specs||"").split(";").map(s=>s.trim()).filter(Boolean), tag, photo:photoUrl(photo),
                   old:Number(String(old||"").replace(/[^\d]/g,""))||0, desc:desc||""};
         }).filter(Boolean);
@@ -284,7 +284,7 @@ async function load(){
   render();
 }
 const modal=document.getElementById("modal");
-const msgFor=p=>p.price ? `Здравствуйте! Хочу заказать: ${p.name} — ${fmt(p.price)} сум. Есть в наличии?` : `Здравствуйте! Сколько стоит ${p.name}? Есть в наличии?`;
+const msgFor=p=>p.price ? `Здравствуйте! Хочу заказать: ${p.name} — ${fmt(p.price)} ${p.cur||"сум"}. Есть в наличии?` : `Здравствуйте! Сколько стоит ${p.name}? Есть в наличии?`;
 function openProduct(id, push){
   const p=PRODUCTS.find(x=>String(x.id)===String(id)); if(!p) return;
   const catName=Object.fromEntries(CATS);
@@ -295,7 +295,7 @@ function openProduct(id, push){
     <div class="info">
       <div class="cat">${catName[p.cat]||""}</div>
       <h2>${esc(p.name)}</h2>
-      <div class="price">${p.price ? `${p.old>p.price?`<s>${fmt(p.old)}</s>`:""}${fmt(p.price)} <small>сум</small>` : `<span class="ask">Цена по запросу</span>`}</div>
+      <div class="price">${p.price ? `${p.old>p.price?`<s>${fmt(p.old)}</s>`:""}${fmt(p.price)} <small>${p.cur||"сум"}</small>` : `<span class="ask">Цена по запросу</span>`}</div>
       ${p.desc?`<p class="desc">${esc(p.desc)}</p>`:""}
       ${p.specs.length?`<ul>${p.specs.map(x=>`<li>${esc(x)}</li>`).join("")}</ul>`:""}
       <a class="btn-tg" href="${tgLink(msgFor(p))}" target="_blank" rel="noopener">${TG_SVG}Заказать в Telegram</a>
